@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.sites-runtime/
+.DS_Store
+*.local
+.npm-cache/
+*.tsbuildinfo
+.openai/
