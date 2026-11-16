@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { RefObject } from 'react'
 
 // loading → the strip grows with real progress, then settles at 100%;
-// revealing → after a short hold (--intro-hold in index.css) the strip opens and the video spins in;
+// revealing → after a short hold the strip opens and the portrait scene unfolds;
 // complete → the page is interactive.
 export type IntroPhase = 'loading' | 'revealing' | 'complete'
 
@@ -14,7 +14,7 @@ const BAR_SETTLE_MS = 220
 const REVEAL_MS = 1700
 
 // Adapted from the expanding strip / video reveal in Reference/Loading.zip.
-export function useIntro(videoRef: RefObject<HTMLVideoElement | null>, reducedMotion: boolean | null) {
+export function useIntro(imageRef: RefObject<HTMLImageElement | null>, reducedMotion: boolean | null) {
   const [phase, setPhase] = useState<IntroPhase>(reducedMotion ? 'complete' : 'loading')
   const [progress, setProgress] = useState(0)
 
@@ -28,19 +28,18 @@ export function useIntro(videoRef: RefObject<HTMLVideoElement | null>, reducedMo
     void document.fonts.ready.then(() => { if (!disposed) fontsReady = true })
     const timer = window.setInterval(() => {
       const elapsed = performance.now() - started
-      // The video plays hidden while loading, so wait until frames are actually flowing.
-      const videoReady = (videoRef.current?.readyState ?? 0) >= 3
+      const imageReady = !!imageRef.current?.complete && imageRef.current.naturalWidth > 0
       const timeProgress = Math.min(elapsed / MIN_LOADING_MS, 1)
-      setProgress(Math.min(94, Math.floor(timeProgress * 76 + (fontsReady ? 9 : 0) + (videoReady ? 9 : 0))))
-      // Always continue with the poster if media is unavailable or slow.
-      if ((elapsed >= MIN_LOADING_MS && fontsReady && videoReady) || elapsed >= MAX_LOADING_MS) {
+      setProgress(Math.min(94, Math.floor(timeProgress * 76 + (fontsReady ? 9 : 0) + (imageReady ? 9 : 0))))
+      // A slow image must never prevent access to the page.
+      if ((elapsed >= MIN_LOADING_MS && fontsReady && imageReady) || elapsed >= MAX_LOADING_MS) {
         window.clearInterval(timer)
         setProgress(100)
         settle = window.setTimeout(() => setPhase('revealing'), BAR_SETTLE_MS)
       }
     }, 40)
     return () => { disposed = true; window.clearInterval(timer); window.clearTimeout(settle) }
-  }, [phase, reducedMotion, videoRef])
+  }, [phase, reducedMotion, imageRef])
 
   useEffect(() => {
     if (phase !== 'revealing') return

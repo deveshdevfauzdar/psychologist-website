@@ -1,12 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, MotionConfig, useMotionValue, useReducedMotion, useSpring } from 'motion/react'
-import type { PointerEvent } from 'react'
+import type { PointerEvent, ReactNode } from 'react'
 import { ArrowUpRight, Check, Mail, Phone, Volume2, VolumeX, X } from 'lucide-react'
 import { useIntro } from './useIntro'
-import { useHeroSource } from './useHeroSource'
+import { journal } from './journal'
 
-type Panel = 'contact' | 'about' | null
-const introduction = 'Founded by a team of licensed mental health professionals with decades of combined clinical experience, our practice blends evidence-based techniques with a warm, personalized approach. We specialize in virtual care, making high-quality therapy accessible, confidential, and convenient—wherever you are.'
+type Panel = 'contact' | 'about' | number | null
+const ease = [0.22, 1, 0.36, 1] as const
+
+function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+  const reducedMotion = useReducedMotion()
+  return <motion.div className={className} initial={reducedMotion ? false : { opacity: 0, y: 38 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: 1.05, ease, delay: reducedMotion ? 0 : delay }}>{children}</motion.div>
+}
+
+function ImageReveal({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
+  const reducedMotion = useReducedMotion()
+  return <motion.div className={'image-reveal ' + className} initial={reducedMotion ? false : { clipPath: 'inset(14% 0% 0% 0%)', opacity: 0, y: 48 }} whileInView={{ clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: 1.25, ease }}><motion.img src={src} alt={alt} loading="lazy" decoding="async" initial={reducedMotion ? false : { scale: 1.08 }} whileInView={{ scale: 1 }} viewport={{ once: true }} transition={{ duration: 1.6, ease }} /></motion.div>
+}
 
 function ConsultationButton({ onClick }: { onClick: () => void }) {
   const reducedMotion = useReducedMotion()
@@ -37,8 +47,7 @@ export default function App() {
   const [audioError, setAudioError] = useState('')
   const [copied, setCopied] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
-  const heroRef = useRef<HTMLVideoElement>(null)
-  const heroSource = useHeroSource(heroRef)
+  const heroRef = useRef<HTMLImageElement>(null)
   const { phase: introPhase, progress, skip: skipIntro } = useIntro(heroRef, reducedMotion)
   const introActive = introPhase !== 'complete'
   const stripVisible = introPhase === 'loading'
@@ -50,14 +59,6 @@ export default function App() {
   const overlayOpen = menuOpen || panel !== null
 
   useEffect(() => {
-    const video = heroRef.current
-    if (!video) return
-    // Like the reference, the video already plays (hidden) while loading, so the reveal starts on moving frames.
-    if (reducedMotion || overlayOpen) video.pause()
-    else void video.play().catch(() => {})
-  }, [reducedMotion, overlayOpen, heroSource.src])
-
-  useEffect(() => {
     if (!overlayOpen && !introActive) return
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -67,9 +68,9 @@ export default function App() {
   useEffect(() => {
     if (!overlayOpen) return
     const focusable = () => {
-      const region = panel ? dialogRef.current : menuRef.current
+      const region = panel !== null ? dialogRef.current : menuRef.current
       const items = Array.from(region?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? [])
-      if (!panel && menuToggle.current) items.unshift(menuToggle.current)
+      if (panel === null && menuToggle.current) items.unshift(menuToggle.current)
       return items
     }
     const timer = window.setTimeout(() => focusable()[0]?.focus(), 160)
@@ -96,7 +97,9 @@ export default function App() {
 
   const goTo = (id: string) => {
     setMenuOpen(false)
-    requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' }))
+    requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth' })
+    })
   }
   const openPanel = (next: Panel) => {
     lastFocus.current = document.activeElement as HTMLElement
@@ -129,8 +132,7 @@ export default function App() {
 
     <header className="site-header" inert={panel !== null || introActive}>
       <a className="brand" href="#home" onClick={event => { event.preventDefault(); goTo('home') }} aria-label="Therapy Office of Anna Tseytlina, home" inert={menuOpen}>
-        <img className="brand-logo" src="media/therapy-office-logo-light.png" alt="Therapy Office of Anna Tseytlina, LMFT" width="1200" height="268" />
-        <img className="brand-logo brand-logo-dark" src="media/therapy-office-logo-dark.png" alt="" width="1200" height="268" />
+        <img className="brand-logo" src="media/therapy-office-logo-dark.png" alt="Therapy Office of Anna Tseytlina, LMFT" width="1200" height="268" />
       </a>
       <div className="header-right">
         <nav className="desktop-nav" aria-label="Main navigation" inert={menuOpen}>
@@ -146,38 +148,39 @@ export default function App() {
 
     <main inert={overlayOpen || introActive}>
       <section id="home" className="hero" aria-labelledby="hero-title">
-        {/* Reveal (see index.css, [data-intro]): the strip opens to full height while the frame spins in from the centre. */}
+        {/* The existing strip / rotating frame intro now reveals the portrait composition. */}
         <div className="hero-media" style={stripVisible ? { clipPath: 'inset(45% ' + (100 - progress) + '% 45% 0%)' } : undefined}>
           <div className="hero-frame">
-            <video ref={heroRef} className="hero-video" src={heroSource.src} poster={heroSource.poster} loop muted playsInline preload="auto" aria-hidden="true" />
+            <img className="hero-backdrop" src="media/hero-plaster-arch.webp" alt="" aria-hidden="true" width="1774" height="887" fetchPriority="high" decoding="async" />
+            <img ref={heroRef} className="hero-portrait" src="media/anna-portrait-concept.png" alt="Portrait created from the supplied face reference" width="1122" height="1402" fetchPriority="high" decoding="async" />
           </div>
         </div>
         {introActive && <div className="loading-progress" style={{ width: progress + '%' }} aria-hidden="true">
           <span className="loading-label">Loading</span><span className="loading-count">/ {String(progress).padStart(3, '0')}</span>
         </div>}
         <div className="hero-content">
-          <p className="hero-description"><span className="reveal-mask"><span>
-            Compassionate online therapy designed to<br className="desktop-break" /> help you rediscover balance, build resilience,<br className="desktop-break" /> and move forward with confidence.
-          </span></span></p>
-          <div className="hero-title-row">
-            <h1 id="hero-title" tabIndex={-1}><span className="reveal-mask"><span>Healing Starts Here</span></span></h1>
-            <div className="hero-cta">
-              <ConsultationButton onClick={() => openPanel('contact')} />
-            </div>
-          </div>
+          <h1 id="hero-title" tabIndex={-1}><span className="reveal-mask"><span>Your Mental</span></span><span className="reveal-mask"><span>Health Matters</span></span></h1>
+          <p className="hero-description"><span className="reveal-mask"><span>Compassionate therapy to help you rediscover balance and move forward with confidence.</span></span></p>
+          <div className="hero-cta"><ConsultationButton onClick={() => openPanel('contact')} /></div>
         </div>
         <button onClick={toggleSound} className="sound-control" aria-pressed={soundOn} aria-label={soundOn ? 'Turn ambient sound off' : 'Turn ambient sound on'}>
           {soundOn ? <Volume2 size={20} strokeWidth={1.4} /> : <VolumeX size={20} strokeWidth={1.4} />}
-          <span>Sound {soundOn ? 'on' : 'off'}</span>
         </button>
         <span className="audio-message" role="status">{audioError}</span>
       </section>
 
-      <section id="approach" className="intro-section" aria-label="Our approach to therapy" style={{ visibility: introActive ? 'hidden' : 'visible' }}>
-        <motion.p className="intro-copy" initial={reducedMotion ? false : 'hidden'} whileInView="visible" viewport={{ once: true, amount: 0.16 }} variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.018 } } }}>
-          {introduction.split(' ').map((word, index) => <motion.span className="intro-word" key={index} variants={{ hidden: { opacity: 0, y: 16, filter: 'blur(4px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: reducedMotion ? 0 : 0.7, ease: 'easeOut' } } }}>{word}{' '}</motion.span>)}
-        </motion.p>
+      <section id="approach" className="approach-section section-shell" aria-labelledby="approach-title">
+        <div className="section-heading"><Reveal><h2 id="approach-title">Feel Understood,<br />Grow Stronger</h2></Reveal></div>
+        <ImageReveal className="room-image" src="media/therapy-room.png" alt="A serene room with two taupe armchairs, warm oak, and soft natural light" />
+        <div className="approach-caption"><Reveal><p>Evidence-based online counseling that meets you where you are—and helps you get where you want to be.</p></Reveal></div>
       </section>
+
+      <section id="journal" className="journal-section section-shell" aria-labelledby="journal-title">
+        <div className="journal-heading"><Reveal><h2 id="journal-title">Journal</h2></Reveal></div>
+        <div className="journal-grid">{journal.map((entry, index) => <article className="journal-card" key={entry.image}><button className="journal-image-button" onClick={() => openPanel(index)} aria-label={'Read: ' + entry.title}><ImageReveal src={'media/' + entry.image} alt={entry.alt} /><span className="journal-image-arrow" aria-hidden="true"><ArrowUpRight size={23} strokeWidth={1.2} /></span></button><Reveal delay={index * 0.07}><h3><button onClick={() => openPanel(index)}>{entry.title}</button></h3></Reveal></article>)}</div>
+      </section>
+
+      <footer className="site-footer section-shell"><div className="footer-bottom"><img src="media/therapy-office-logo-dark.png" alt="Therapy Office of Anna Tseytlina, LMFT" width="1200" height="268" /><a href="mailto:anna@lmftcounselingnjny.com">Contact <ArrowUpRight size={17} /></a></div></footer>
     </main>
 
     {introActive && <div className="loading-screen">
@@ -193,8 +196,8 @@ export default function App() {
             {[{ name: 'Home', action: () => goTo('home') }, { name: 'Our approach', action: () => goTo('approach') }, { name: 'About Anna', action: () => openPanel('about') }, { name: 'Contact', action: () => openPanel('contact') }].map((item, index) => <div className="menu-link-mask" key={item.name}><motion.button initial={{ opacity: 0, y: reducedMotion ? 0 : '105%' }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reducedMotion ? 0 : 0.3 + index * 0.075, duration: 0.85, ease: [0.22, 1, 0.36, 1] }} onClick={item.action}><span className="menu-number">0{index + 1}</span><span className="menu-link-text">{item.name}</span><ArrowUpRight className="menu-arrow" strokeWidth={1} /></motion.button></div>)}
           </nav>
           <motion.div className="menu-aside" initial={{ opacity: 0, y: 25 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65, duration: 1.1 }}>
-            <div className="menu-visual"><motion.img src="media/hero-poster.jpg" alt="" initial={{ scale: 1.15 }} animate={{ scale: 1 }} transition={{ duration: 1.6, ease: 'easeOut' }} /></div>
-            <p>Anna Tseytlina, LMFT</p><span>NEW YORK & NEW JERSEY</span>
+            <div className="menu-visual"><motion.img src="media/stillness-stone.png" alt="" initial={{ scale: 1.15 }} animate={{ scale: 1 }} transition={{ duration: 1.6, ease: 'easeOut' }} /></div>
+            <p>Anna Tseytlina, LMFT</p>
           </motion.div>
         </div>
         <motion.div className="menu-footer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.8 }}><a href="mailto:anna@lmftcounselingnjny.com">anna@lmftcounselingnjny.com <ArrowUpRight size={14} /></a><a href="tel:+15512460611">+1 (551) 246-0611</a></motion.div>
@@ -202,12 +205,12 @@ export default function App() {
     </AnimatePresence>
 
     <AnimatePresence>
-      {panel && <motion.div className="dialog-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPanel(null)}>
-        <motion.div ref={dialogRef} className="contact-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" initial={{ opacity: 0, y: reducedMotion ? 0 : 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }} transition={{ duration: 0.35 }} onClick={event => event.stopPropagation()}>
+      {panel !== null && <motion.div className="dialog-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPanel(null)}>
+        <motion.div ref={dialogRef} className={'contact-dialog' + (typeof panel === 'number' ? ' journal-dialog' : '')} role="dialog" aria-modal="true" aria-labelledby="dialog-title" initial={{ opacity: 0, y: reducedMotion ? 0 : 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }} transition={{ duration: 0.35 }} onClick={event => event.stopPropagation()}>
           <button className="dialog-close" aria-label="Close dialog" onClick={() => setPanel(null)}><X size={23} strokeWidth={1.2} /></button>
           <img className="dialog-logo" src="media/therapy-office-logo-dark.png" alt="Therapy Office of Anna Tseytlina, LMFT" width="1200" height="268" />
-          <h2 id="dialog-title">{panel === 'about' ? 'About Anna' : 'Let’s talk.'}</h2>
-          {panel === 'about' ? <><p>I’m Anna Tseytlina, a licensed marriage and family therapist serving New York and New Jersey. I work with individuals, couples, and families through a warm, collaborative approach.</p><p>Whether you’re navigating anxiety, relationship challenges, or a season of change, we can make room to explore what matters to you.</p><button className="dark-cta" onClick={() => setPanel('contact')}>Book a consultation <ArrowUpRight size={20} /></button></> : <><p>A complimentary 15-minute phone consultation is a chance to share a little about yourself, ask questions, and see if we’re a good fit.</p><div className="contact-options"><a href="tel:+15512460611"><Phone size={20} strokeWidth={1.3} /><span><small>GIVE ME A CALL</small>+1 (551) 246-0611</span><ArrowUpRight size={20} /></a><a href="mailto:anna@lmftcounselingnjny.com?subject=Initial%20consultation"><Mail size={20} strokeWidth={1.3} /><span><small>SEND ME A NOTE</small>anna@lmftcounselingnjny.com</span><ArrowUpRight size={20} /></a></div><button className="copy-email" onClick={copyEmail}>{copied ? <><Check size={15} /> Email address copied</> : 'Copy email address'}</button></>}
+          <h2 id="dialog-title">{typeof panel === 'number' ? journal[panel].title : panel === 'about' ? 'About Anna' : 'Let’s talk.'}</h2>
+          {typeof panel === 'number' ? <>{journal[panel].paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}<button className="dark-cta" onClick={() => setPanel('contact')}>Book a consultation <ArrowUpRight size={20} /></button></> : panel === 'about' ? <><p>I’m Anna Tseytlina, a licensed marriage and family therapist serving New York and New Jersey. I work with individuals, couples, and families through a warm, collaborative approach.</p><p>Whether you’re navigating anxiety, relationship challenges, or a season of change, we can make room to explore what matters to you.</p><button className="dark-cta" onClick={() => setPanel('contact')}>Book a consultation <ArrowUpRight size={20} /></button></> : <><p>A complimentary 15-minute phone consultation is a chance to share a little about yourself, ask questions, and see if we’re a good fit.</p><div className="contact-options"><a href="tel:+15512460611"><Phone size={20} strokeWidth={1.3} /><span><small>PHONE</small>+1 (551) 246-0611</span><ArrowUpRight size={20} /></a><a href="mailto:anna@lmftcounselingnjny.com?subject=Initial%20consultation"><Mail size={20} strokeWidth={1.3} /><span><small>EMAIL</small>anna@lmftcounselingnjny.com</span><ArrowUpRight size={20} /></a></div><button className="copy-email" onClick={copyEmail}>{copied ? <><Check size={15} /> Email address copied</> : 'Copy email address'}</button></>}
         </motion.div>
       </motion.div>}
     </AnimatePresence>
