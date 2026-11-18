@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { practicePages } from './build/practice-pages'
 
-// Relative base so the build works both at a domain root and under a subpath such as GitHub Pages.
-export default defineConfig({ base: './', plugins: [react(), tailwindcss()] })
+export default defineConfig({
+  base: './',
+  plugins: [react(), tailwindcss(), practicePages()],
+  build: { copyPublicDir: false },
+})

@@ -1,6 +1,12 @@
 # Therapy Office of Anna Tseytlina — website
 
-Single-page site built with React, Vite and Tailwind.
+Therapy practice website built with React, Vite and Tailwind. The build includes separate editorial, contact, confirmation, privacy and terms pages, plus a custom 404.
+
+## Connecting the consultation form
+
+Set `endpoint` in `public/consultation-form.json` to the public HTTPS submission URL from the chosen form service, then redeploy. The endpoint must accept a browser POST with multipart fields named `name`, `email`, `state` and `message`, allow requests from the site origin and return a successful HTTP status after accepting the submission. Keep any secret credentials on the provider’s server.
+
+An empty endpoint enables the preview flow. It validates the fields and opens the thank-you page without sending or saving visitor details. With an endpoint connected, the confirmation follows a successful submission. If delivery fails, the visitor can retry with the fields preserved.
 
 ```bash
 npm install
