@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import { pages } from './pages'
-import { office } from './practice'
+import { office, crisisNote } from './practice'
 
 function hrefFor(path: string) { return path ? path + '/' : './' }
 
@@ -74,10 +74,13 @@ export function SiteHeader({ path, open, setOpen, introActive }: {
 export function SiteFooter({ path }: { path: string }) {
   return <footer className="practice-footer">
     <div className="footer-directory">
-      <a href="./" className="footer-brand"><img width="1200" height="268" src="media/therapy-office-logo-dark.png" alt="Therapy Office of Anna Tseytlina, home" /></a>
+      <div className="footer-brand"><a href="./"><img width="1200" height="268" src="media/therapy-office-logo-dark.png" alt="Therapy Office of Anna Tseytlina, home" /></a>
+        <p>Anna Tseytlina, LMFT. Therapy for individuals, couples and families.</p>
+        <p>Online across New York and New Jersey</p></div>
       <nav aria-label="Footer navigation">{pages.filter(page => ['', 'about', 'therapy', 'fees', 'journal', 'contact'].includes(page.path)).map(page => <a key={page.path} href={hrefFor(page.path)}>{page.label}</a>)}</nav>
       {path !== 'contact' && <address><a href={office.emailHref}>{office.email}</a><a href={office.phoneHref}>{office.phone}</a></address>}
     </div>
-    <div className="footer-policies"><a href="privacy-policy/">Privacy policy</a><a href="website-terms/">Website terms</a></div>
+    <p className="footer-crisis">{crisisNote}</p>
+    <div className="footer-policies"><span>Therapy Office of Anna Tseytlina, LMFT</span><a href="privacy-policy/">Privacy policy</a><a href="website-terms/">Website terms</a></div>
   </footer>
 }

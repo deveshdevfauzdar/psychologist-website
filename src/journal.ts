@@ -34,6 +34,7 @@ export const journal = [
       { title: 'A request small enough to make', paragraphs: [
         'There may be one part of your day you would like another person to take seriously. Perhaps you want ten quiet minutes after work, or someone else to decide what to cook on Wednesday. What would it sound like to ask for that in plain words?',
         'Sometimes the question brings up more than the time itself: a worry about disappointing someone, or the feeling that rest has to be earned. Those thoughts can make for a worthwhile conversation in therapy.',
+        'If you’d like to talk it through, the first call is free and lasts 15 minutes.',
       ] },
     ],
   },
@@ -53,6 +54,7 @@ export const journal = [
       { title: 'Find the smaller question', paragraphs: [
         'A decision like “Should I leave?” can contain several smaller questions. Do you need different hours? Is there a conversation you have been putting off? What information would make the options clearer?',
         'In a therapy session, there is time to look at one of those questions without having to settle the whole matter that day. Sometimes the most useful thing to take home is a more precise question.',
+        'If you’d like to talk it through, the first call is free and lasts 15 minutes.',
       ] },
     ],
   },

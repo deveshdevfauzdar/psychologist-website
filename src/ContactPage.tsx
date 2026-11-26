@@ -67,7 +67,7 @@ function ContactForm({ onComplete }: ContactProps) {
   }
 
   return <div className="letter">
-    <h2>Consultation request</h2>
+    <h2>Request a free 15-minute call</h2>
     <form onSubmit={submit} aria-busy={sending}>
       <div className="letter-row">
         <label htmlFor="visitor-name">Your name<input id="visitor-name" name="name" type="text" autoComplete="name" maxLength={90} required onInput={e => e.currentTarget.setCustomValidity('')} /></label>
@@ -77,10 +77,12 @@ function ContactForm({ onComplete }: ContactProps) {
         <span className="select-line"><select id="visitor-state" name="state" defaultValue=""><option value="">Choose a state</option><option>New York</option><option>New Jersey</option></select><ChevronDown size={17} aria-hidden="true" /></span>
       </label>
       <label htmlFor="visitor-message">Your note <span className="optional">Optional</span>
-        <textarea id="visitor-message" name="message" rows={3} maxLength={1000} placeholder="A scheduling question or a good time to reach you…" /></label>
+        <span className="field-hint">Please keep health details out of this form. We can talk on the call.</span>
+        <textarea id="visitor-message" name="message" rows={3} maxLength={1000} /></label>
       <div className="letter-send"><button type="submit" className="letter-button" disabled={delivery.status !== 'ready' || sending}>
-        {sending ? 'Submitting…' : 'Submit request'} <ArrowRight size={19} strokeWidth={1.4} aria-hidden="true" /></button>
+        {sending ? 'Submitting…' : 'Request my call'} <ArrowRight size={19} strokeWidth={1.4} aria-hidden="true" /></button>
         <a className="form-policy" href="privacy-policy/">Privacy policy</a></div>
+      <p className="form-status">This form is not for emergencies. If you are in crisis, call or text 988, or call 911.</p>
       {delivery.status === 'ready' && !delivery.endpoint && <p className="form-status">Preview form. To reach Anna today, use the contact details on this page.</p>}
       {delivery.status === 'unavailable' && <p className="form-status" role="status">The form is unavailable. You can call or email Anna directly.</p>}
       {error && <p className="form-status" role="alert">{error}</p>}
@@ -111,7 +113,7 @@ export function ContactPage({ onComplete }: ContactProps) {
     </section>
     <section className="service-map section-shell" aria-labelledby="map-title">
       <Reveal><h2 id="map-title">Service area</h2><p>New York, NY 10075</p>
-        <p className="map-note">Appointments are online for clients in New York and New Jersey.</p>
+        <p className="map-note">Online across New York and New Jersey.</p>
         <TextLink href={office.map}>Open in Google Maps</TextLink></Reveal>
       <div className="map-frame"><iframe title="Google map of the New York 10075 service area" src={office.mapEmbed} loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen /></div>
     </section>

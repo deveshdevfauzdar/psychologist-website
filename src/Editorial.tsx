@@ -2,6 +2,7 @@ import { useId, useState } from 'react'
 import type { ReactNode, PointerEvent } from 'react'
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react'
 import { ArrowUpRight, Plus } from 'lucide-react'
+import { consultationLabel } from './practice'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
@@ -65,7 +66,7 @@ export function ConsultationButton() {
   return <motion.a href="contact/" className="consultation-button" style={{ x, y }}
     onPointerMove={move} onPointerLeave={() => { pointerX.set(0); pointerY.set(0) }}>
     <span className="cta-fill" aria-hidden="true" />
-    <span className="cta-label"><span>Book a consultation</span><span aria-hidden="true">Book a consultation</span></span>
+    <span className="cta-label"><span>{consultationLabel}</span><span aria-hidden="true">{consultationLabel}</span></span>
     <span className="cta-arrow" aria-hidden="true"><ArrowUpRight size={24} strokeWidth={1.4} /><ArrowUpRight size={24} strokeWidth={1.4} /></span>
   </motion.a>
 }

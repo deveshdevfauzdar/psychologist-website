@@ -138,6 +138,7 @@
 .fee-ledger dd { margin: 0; font: 400 clamp(34px,3vw,53px)/1 var(--serif); letter-spacing: -.024em; }
 .fee-ledger .consultation-rate dt { font: 400 15px/1.4 var(--font-sans); color: var(--muted-ink); }
 .consultation-rate dd { font-size: clamp(22px,1.85vw,32px); }
+.fee-ledger small { display: block; margin-top: 4px; font: 400 15px/1.4 var(--font-sans); color: var(--muted-ink); }
 .coverage-selector { padding: 0; margin: 0; border: 0; min-width: 0; }
 .coverage-selector legend { margin: 0 0 10px; padding: 0; font-size: 15px; color: var(--muted-ink); }
 .state-tabs { position: relative; display: grid; grid-template-columns: 1fr 1fr; width: min(100%,324px); border-bottom: 1px solid #c9c1b1; }
@@ -196,9 +197,10 @@
 .letter-button:is(:hover,:focus-visible) { background: #615547; }
 .letter-button:is(:hover,:focus-visible) svg { transform: translateX(4px); }
 .letter-button:disabled { opacity: .55; cursor: wait; }
-.form-policy, .form-status { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted-ink); }
+.form-policy, .form-status, .field-hint { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted-ink); }
 .form-status { max-width: 48ch; margin-top: -8px; }
-.form-policy, .terms-page a { text-decoration: underline; text-underline-offset: 4px; }
+.field-hint { display: block; }
+.form-policy, .terms-page a, .disclosure-content a { text-decoration: underline; text-underline-offset: 4px; }
 .service-map { display: grid; grid-template-columns: minmax(0,.63fr) minmax(0,1.37fr); gap: clamp(30px,6vw,110px); align-items: center; padding-bottom: clamp(65px,7vw,125px); }
 .service-map h2 { font-size: clamp(43px,4.35vw,76px); margin-bottom: 19px; }
 .service-map p { font-size: clamp(18px,1.38vw,23px); line-height: 1.4; }
@@ -212,7 +214,10 @@
 .footer-directory nav { display: grid; grid-template-columns: auto auto; gap: 6px 28px; }
 .footer-directory :is(nav,address) { font-size: 15px; line-height: 1.55; }
 .footer-directory address { display: grid; gap: 5px; font-style: normal; }
-.footer-policies { max-width: 1460px; margin: 25px auto 0; padding-top: 11px; border-top: 1px solid var(--rule); display: flex; gap: 22px; font-size: 12px; color: var(--muted-ink); }
+.footer-brand p { max-width: 36ch; margin: 0; font-size: 15px; line-height: 1.55; }
+.footer-brand a + p { margin-top: 10px; }
+.footer-crisis { max-width: 1460px; margin: 25px auto 0; font-size: 15px; line-height: 1.55; }
+.footer-policies { max-width: 1460px; margin: 25px auto 0; padding-top: 11px; border-top: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 12px; color: var(--muted-ink); }
 .terms-page { padding-block: clamp(48px,6vw,96px) clamp(80px,10vw,165px); }
 .terms-page h1 { margin-bottom: 32px; }
 .terms-page p { max-width: 59ch; font-size: clamp(18px,1.35vw,22px); line-height: 1.55; }

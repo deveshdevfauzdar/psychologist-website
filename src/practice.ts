@@ -12,24 +12,22 @@ export const office = {
   mapEmbed: 'https://www.google.com/maps?q=40.7728432%2C-73.9558204&ll=40.7728432%2C-73.9558204&z=14&output=embed',
 }
 
+export const consultationLabel = 'Book a free 15-minute call'
+export const crisisNote = 'This site is not monitored for emergencies. If you are in crisis, call or text 988, or call 911.'
+
 export const areas = [
+  { title: 'Anxiety', text: 'Explore persistent worry, the situations that set it off and practical ways to respond when your thoughts keep circling.' },
+  { title: 'Relationship therapy', text: 'For partners who find themselves having the same argument, or struggling to say what they need. We slow the conversation down so both people can be heard.' },
   { title: 'ADHD', text: 'Support with attention, impulsivity and the everyday work of getting organized. Bring one part of the day that feels especially hard.' },
   { title: 'Women’s mental health', text: 'Space for the emotional changes that can come with pregnancy, new parenthood, hormonal shifts and the demands of caring for others.' },
   { title: 'Women’s issues', text: 'We can talk about gender-related pressures, personal boundaries and the expectations shaping your relationships or work.' },
-  { title: 'Relationship therapy', text: 'For partners who find themselves having the same argument, or struggling to say what they need. We slow the conversation down so both people can be heard.' },
-  { title: 'Anxiety', text: 'Explore persistent worry, the situations that set it off and practical ways to respond when your thoughts keep circling.' },
-  { title: 'Therapy for teens', text: 'A place to discuss school, friendships, identity and changing expectations at home. We can talk about how family members might take part.' },
+  { title: 'Therapy for teens', text: 'A place to talk about school, friendships, identity and changing expectations at home. Parents: on the first call we’ll agree how you take part.' },
+  { title: 'Trauma', text: 'Past experiences can still shape how safe you feel with other people. You choose where to begin and how much of the story to share.' },
   { title: 'Self-esteem', text: 'Look at the voice you use with yourself, where it came from and the effect it has on everyday choices and relationships.' },
   { title: 'Career coaching', text: 'Work through a decision, a professional transition or a boundary you want to set, with room to consider what matters outside work too.' },
-  { title: 'Trauma', text: 'Past experiences can still shape how safe you feel with other people. You choose where to begin and how much of the story to share.' },
 ]
 
-export const otherConcerns = [
-  'Behavioral issues', 'Child therapy', 'Coping skills', 'Depression', 'Divorce', 'Family conflict',
-  'Grief', 'Infidelity', 'Life coaching', 'Life transitions', 'Marital and premarital concerns',
-  'Relationship issues', 'Peer relationships', 'Parenting', 'Obsessive-compulsive disorder (OCD)',
-  'Oppositional defiant disorder (ODD)',
-]
+export const otherConcerns = 'I also work with depression, grief, OCD, family conflict, parenting, divorce, infidelity, premarital concerns, life transitions, and behavioural concerns in children.'
 
 export const methods = [
   'Art therapy', 'Coaching', 'Cognitive behavioral therapy (CBT)', 'Family systems', 'Mindfulness',
@@ -38,7 +36,9 @@ export const methods = [
 ]
 
 export const questions = [
-  { title: 'What happens on the first call?', text: 'The consultation is a free, 15-minute phone call. Ask about availability, cost and what a first session might look like.' },
-  { title: 'Do we meet online?', text: 'Yes. Anna offers video sessions to people in New York and New Jersey. Most sessions last about 45 minutes and take place weekly. You can discuss the schedule together.' },
-  { title: 'What should I ask my insurer?', text: 'Give your insurer Anna’s name and credential, LMFT. Ask about coverage for video sessions, your deductible and the amount you would pay per visit. In New Jersey, ask about out-of-network benefits.' },
+  { title: 'What happens on the first call?', text: 'It’s a free, 15-minute phone call. Ask about availability, cost and what a first session might look like. There’s no obligation to book.' },
+  { title: 'Do we meet online?', text: 'Yes. I offer video sessions to people in New York and New Jersey. Most sessions last about 45 minutes and take place weekly. We’ll agree the schedule together.' },
+  { title: 'What should I ask my insurer?', text: 'Give them my name and credential, LMFT. Ask about cover for video sessions, your deductible and what you’d pay per visit. If I’m out of network for your plan, ask about out-of-network benefits.' },
+  { title: 'Is what I say confidential?', text: 'Yes. There are a few legal exceptions, such as serious risk of harm to you or someone else, and I’ll go through them in our first session.' },
+  { title: 'Do you see teens and children?', text: 'Yes. On the first call we’ll agree how parents take part.' },
 ]

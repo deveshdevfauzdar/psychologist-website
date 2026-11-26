@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import { Photograph, Reveal, SectionCover, TextLink } from './Editorial'
 import { journal } from './journal'
+import { consultationLabel } from './practice'
 
 export function HomeJournal() {
   return <section className="home-journal section-shell" aria-labelledby="home-journal-title">
@@ -35,7 +36,8 @@ export function JournalArticle({ entry }: { entry: typeof journal[number] }) {
       <div className="reading-copy">{entry.sections.map(section => <section key={section.title}>
         <h2>{section.title}</h2>{section.paragraphs.map(p => <p key={p}>{p}</p>)}
       </section>)}
-        <TextLink href={'journal/' + next.slug + '/'}>{next.title}</TextLink>
+        <p><TextLink href="contact/">{consultationLabel}</TextLink></p>
+        <TextLink href={'journal/' + next.slug + '/'}>Next: {next.title}</TextLink>
       </div>
     </div>
   </article>

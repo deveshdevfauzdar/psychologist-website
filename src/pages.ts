@@ -1,7 +1,7 @@
 import { journal } from './journal'
 
 export const pages = [
-  { path: '', label: 'Home', title: 'Your Mental Health Matters', description: 'Individual and couples therapy with Anna Tseytlina, LMFT, in New York and New Jersey.' },
+  { path: '', label: 'Home', title: 'Online therapy for anxiety, ADHD and relationships that feel stuck', description: 'With Anna Tseytlina, LMFT. Video sessions for individuals, couples and families across New York and New Jersey.' },
   { path: 'about', label: 'About Anna', title: 'About Anna Tseytlina, LMFT', description: 'Meet Anna, learn about her approach to therapy, and see her training and licenses.' },
   { path: 'perspective', label: 'Being human', title: 'Being human is messy', description: 'A note about everyday life and making room for it in therapy.' },
   { path: 'therapy', label: 'Therapy', title: 'Therapy & areas of care', description: 'Explore support for relationships, anxiety, self-esteem, ADHD, trauma, teens, families and life changes.' },

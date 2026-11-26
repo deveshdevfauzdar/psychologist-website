@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import type { CSSProperties } from 'react'
 import { MotionConfig, useReducedMotion } from 'motion/react'
 import { ArrowUpRight } from 'lucide-react'
 import { useIntro } from './useIntro'
@@ -66,8 +67,8 @@ export default function App() {
           </div>
           {introActive && <div className="loading-progress" style={{ width: progress + '%' }} aria-hidden="true"><span className="loading-label">Loading</span><span className="loading-count">/ {String(progress).padStart(3, '0')}</span></div>}
           <span data-sound-slot="" className="hero-sound" /><div className="hero-content">
-            <h1 id="hero-title"><span className="reveal-mask"><span>Your Mental</span></span><span className="reveal-mask"><span>Health Matters</span></span></h1>
-            <p className="hero-description"><span className="reveal-mask"><span>Compassionate therapy to help you rediscover balance and move forward with confidence.</span></span></p>
+            <h1 id="hero-title"><span className="reveal-mask"><span>Online therapy for anxiety, </span></span><span className="reveal-mask" style={{ '--reveal-delay': '.8625s' } as CSSProperties}><span>ADHD and relationships </span></span><span className="reveal-mask"><span>that feel stuck</span></span></h1>
+            <p className="hero-description"><span className="reveal-mask"><span>With Anna Tseytlina, LMFT. Video sessions for individuals, couples and families across New York and New Jersey.</span></span></p>
             <div className="hero-cta"><ConsultationButton /></div>
           </div>
         </section>

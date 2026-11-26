@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Disclosure, Photograph, Reveal, SectionCover, TextLink } from './Editorial'
-import { office, areas, methods, otherConcerns, questions } from './practice'
+import { office, areas, methods, otherConcerns, questions, consultationLabel } from './practice'
 
 export function ApproachPreview() {
   return <section id="approach" className="approach-section section-shell" aria-labelledby="approach-title">
-    <div className="section-heading"><Reveal><h2 id="approach-title">Feel Understood,<br />Grow Stronger</h2></Reveal></div>
+    <div className="section-heading"><Reveal><h2 id="approach-title">Where would you<br />like to start?</h2></Reveal></div>
     <Photograph className="room-image" file="therapy-room.webp" alt="Two armchairs facing a low oak table in soft window light" />
     <div className="approach-caption">
-      <p>Online therapy for individuals, couples and families in New York and New Jersey.</p>
+      <p>Anxiety, ADHD, relationships, women’s mental health, teens and families, trauma. Most people arrive with more than one.</p>
       <TextLink href="therapy/">Explore therapy</TextLink>
     </div>
   </section>
@@ -19,7 +19,7 @@ export function HomePractice() {
       <Photograph file="anna-at-the-table.webp" alt="Anna at a writing table in soft afternoon light" className="home-anna-photo" />
       <div className="home-anna-copy"><Reveal>
         <h2 id="home-anna">Meet Anna <br />Tseytlina.</h2>
-        <p>I’m a marriage and family therapist. I work with individuals, couples and families on the patterns that show up in their everyday lives.</p>
+        <p>I’m a marriage and family therapist with more than nine years in practice, licensed in New York and New Jersey. I work with individuals, couples and families on the patterns that show up in everyday life.</p>
         <div className="home-anna-links"><TextLink href="about/">About Anna</TextLink><TextLink href="perspective/">A note on being human</TextLink></div>
       </Reveal></div>
     </div>
@@ -29,8 +29,8 @@ export function HomePractice() {
 export function HomeVisit() {
   return <section className="home-visit section-shell" aria-labelledby="home-visit-title">
     <Reveal><h2 id="home-visit-title">Before your first visit</h2></Reveal>
-    <div><p>A first phone call is free and lasts 15 minutes.</p>
-      <div className="home-visit-links"><TextLink href="fees/">Fees &amp; insurance</TextLink><TextLink href="contact/">Arrange a call</TextLink></div>
+    <div><p>The first phone call is free and lasts 15 minutes. After that we meet by video, for about 45 minutes, usually weekly. Individual sessions are {office.individual} and couples sessions are {office.couples}.</p>
+      <div className="home-visit-links"><TextLink href="contact/">{consultationLabel}</TextLink><TextLink href="fees/">Fees &amp; insurance</TextLink></div>
     </div>
   </section>
 }
@@ -55,8 +55,10 @@ export function AboutPage() {
       <Reveal><h2 id="about-work">The way I work</h2></Reveal>
       <div className="reading-copy">
         <p className="reading-lead">A session can begin with something as ordinary as what happened at the breakfast table this morning.</p>
-        <p>I’m interested in the people in your life and the situations you keep finding yourself in. For over eight years I’ve worked with children, adolescents and adults, individually, as couples and as families.</p>
+        <p>I’m interested in the people in your life and the situations you keep finding yourself in. For more than nine years I’ve worked with children, adolescents and adults, individually, as couples and as families.</p>
         <p>My work draws on family systems, cognitive behavioral therapy and mindfulness. We might trace a pattern in a relationship, or try a different response to a thought you know well.</p>
+        <p>I see clients by video across New York and New Jersey. The first call is free and takes 15 minutes.</p>
+        <TextLink href="contact/">{consultationLabel}</TextLink>
       </div>
     </section>
     <section className="reading-spread training section-shell" aria-labelledby="training-title">
@@ -77,7 +79,7 @@ export function PerspectivePage() {
         <Reveal><h1>Being human <br />is <em>messy.</em></h1></Reveal>
         <Reveal><p>You say “I’m fine” on the phone, then spend the walk home thinking about what you wanted to say.</p>
           <p>Sometimes you need a place to finish that sentence. We can start there, even if you change your mind halfway through.</p>
-          <TextLink href="contact/">Talk with Anna</TextLink></Reveal>
+          <TextLink href="contact/">{consultationLabel}</TextLink></Reveal>
       </div>
       <div className="perspective-art">
         <Photograph className="forest-frame" file="woods-at-the-water.webp" alt="A person pauses beneath tall pines at the edge of a quiet inlet" priority />
@@ -91,18 +93,22 @@ export function TherapyPage() {
   return <>
     <SectionCover title={<>What brings you<br />to therapy?</>} file="quiet-lounge.webp" alt="Two curved chairs and a low limestone table beside a plaster hearth" className="therapy-cover" />
     <section className="reading-spread section-shell services-spread" aria-labelledby="areas-title">
-      <Reveal><h2 id="areas-title">Areas of care</h2><p className="side-copy">Individual, couples and family therapy for children, teens and adults.</p><TextLink href="contact/">Book a consultation</TextLink></Reveal>
+      <Reveal><h2 id="areas-title">Areas of care</h2><p className="side-copy">Individual, couples and family therapy for children, teens and adults, by video across New York and New Jersey.</p><TextLink href="contact/">{consultationLabel}</TextLink></Reveal>
       <div className="disclosure-list">{areas.map(item => <Disclosure key={item.title} title={item.title}><p>{item.text}</p></Disclosure>)}
-        <Disclosure title="Other concerns"><WordList entries={otherConcerns} /></Disclosure>
-        <Disclosure title="Therapy approaches"><WordList entries={methods} /></Disclosure>
+        <Disclosure title="Other concerns"><p>{otherConcerns}</p></Disclosure>
+        <Disclosure title="Therapy approaches"><p>I draw mainly on cognitive behavioral therapy, family systems and mindfulness. The full list is on the <a href="about/">About page</a>.</p></Disclosure>
       </div>
+    </section>
+    <section className="home-visit section-shell" aria-labelledby="fit-title">
+      <Reveal><h2 id="fit-title">Not sure where you fit?</h2></Reveal>
+      <div><div className="home-visit-links"><TextLink href="contact/">{consultationLabel}</TextLink></div></div>
     </section>
   </>
 }
 
 const coverage = {
-  'New York': 'Anna accepts select plans from Aetna, Anthem BCBS, Evernorth and Cigna. Confirm your specific plan and copay before booking.',
-  'New Jersey': 'Anna is out of network. If your plan includes out-of-network benefits, ask your insurer what it reimburses for a video session.',
+  'New York': 'Sessions for New York clients are self-pay. I don’t take insurance in New York. You can ask for a written Good Faith Estimate of your costs before you start.',
+  'New Jersey': 'I accept select insurance plans in New Jersey. Send me your plan name and we’ll confirm your cover and copay before you book.',
 }
 
 export function FeesPage() {
@@ -113,9 +119,9 @@ export function FeesPage() {
         <div className="arrival"><h1 id="fees-title">Fees &amp; insurance</h1>
           <p className="fee-intro">Online sessions for clients in New York and New Jersey.</p></div>
         <dl className="fee-ledger">
-          <div><dt>Individual session</dt><dd>{office.individual}</dd></div>
+          <div><dt>Individual session<small>About 45 minutes</small></dt><dd>{office.individual}</dd></div>
           <div><dt>Couples session</dt><dd>{office.couples}</dd></div>
-          <div className="consultation-rate"><dt>15-minute consultation</dt><dd>Free</dd></div>
+          <div className="consultation-rate"><dt>15-minute consultation<small>By phone</small></dt><dd>Free</dd></div>
         </dl>
         <fieldset className="coverage-selector">
           <legend>Insurance by state</legend>
